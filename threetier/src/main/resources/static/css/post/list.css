@@ -1,0 +1,79 @@
+table {
+    border: 1px solid black;
+    width: 750px;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 1.5rem;
+}
+
+button.on {
+    background: black;
+    color: white;
+}
+
+button {
+    margin-right: 7px;
+}
+
+#page-wrap {
+    text-align: center;
+    width: 750px;
+    margin: 0 auto;
+    font-size: 1.5rem;
+}
+
+td, th {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#order-wrap {
+    text-align: right;
+}
+
+a {
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+a.order.on {
+    font-weight: bold;
+}
+
+#search-wrap {
+    text-align: center;
+    width: 750px;
+    margin: 0 auto;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+#search-wrap div {
+    border: 1px solid black;
+    margin-right: 10px;
+    width: 130px;
+    height: 40px;
+    cursor: pointer;
+    text-align: center;
+}
+
+#search-wrap div.on {
+    background: black;
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

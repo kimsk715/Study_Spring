@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>수정하기</title>
+    <link rel="stylesheet" href="/css/post/list.css">
+</head>
+<body>
+<header th:replace="/fixed/header.html :: #main-header"></header>
+<div th:if="${session.member.id eq post.memberId}">
+    <a th:href="@{/post/update(id=${post.id})}">수정하기</a>
+    <a href="/post/delete">삭제하기</a>
+</div>
+    <form name="update-form" action="/post/update" method="post" th:object="${post}" enctype="multipart/form-data">
+        <input type="hidden" name="id" th:value="${post.id}">
+        <input type="text" th:field="*{postTitle}">
+        <textarea th:field="*{postContent}"></textarea>
+        <input class="file" type="file" name="file">
+        <input class="file" type="file" name="file">
+        <input class="file" type="file" name="file">
+        <button type="button" id="update-ok">수정완료</button>
+    </form>
+<div><button id="reset">초기화</button></div>
+<div id="file-wrap"></div>
+</body>
+<script src="/js/util.js"></script>
+<script th:inline="javascript">
+    const post = [[${post}]];
+</script>
+<script src="/js/file/update-event.js"></script>
+</html>

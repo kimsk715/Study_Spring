@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.threetier.mapper.ReplyMapper">
+    <insert id="insert">
+        INSERT INTO TBL_REPLY (ID, REPLY_CONTENT, MEMBER_ID, POST_ID)
+        VALUES (SEQ_REPLY.NEXTVAL, #{replyContent}, #{memberId}, #{postId})
+    </insert>
+    <select id="selectAllByPostId" resultType="replyDTO">
+        SELECT
+            MEMBER_NAME, ID, REPLY_CONTENT, MEMBER_ID, POST_ID, CREATED_DATE, UPDATED_DATE
+        FROM
+            (
+                SELECT
+                    ROWNUM R, MEMBER_NAME, ID, REPLY_CONTENT, MEMBER_ID, POST_ID, CREATED_DATE, UPDATED_DATE
+                FROM
+                    (
+                        SELECT
+                            MEMBER_NAME, ID, REPLY_CONTENT, MEMBER_ID, POST_ID, CREATED_DATE, UPDATED_DATE
+                        FROM VIEW_REPLY_MEMBER
+                        WHERE POST_ID = #{postId}
+                        ORDER BY ID DESC
+                    )
+                <![CDATA[
+                WHERE ROWNUM <= #{pagination.endRow}
+                ]]>
+            )
+        <![CDATA[
+        WHERE R >= #{pagination.startRow}
+        ]]>
+    </select>
+    <select id="selectTotalByPostId" resultType="_int">
+        SELECT COUNT(*) FROM TBL_REPLY
+        WHERE POST_ID = #{postId}
+    </select>
+    <update id="update">
+        UPDATE TBL_REPLY
+        SET REPLY_CONTENT = #{replyContent}, UPDATED_DATE = SYSDATE
+        WHERE ID = #{id}
+    </update>
+    <delete id="delete">
+        DELETE FROM TBL_REPLY
+        WHERE ID = #{id}
+    </delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

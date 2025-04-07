@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>상세보기</title>
+    <link rel="stylesheet" href="/css/post/list.css">
+</head>
+<body>
+<header th:replace="/fixed/header.html :: #main-header"></header>
+<div th:if="${session.member != null} and ${session.member.id eq post.memberId}">
+    <a th:href="@{/post/update(id=${post.id})}">수정하기</a>
+    <a th:href="@{/post/delete(id=${post.id})}">삭제하기</a>
+</div>
+<table id="posts-wrap" th:object="${post}">
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>내용</th>
+        <th>작성자</th>
+        <th>조회수</th>
+        <th>작성 날짜</th>
+    </tr>
+    <tr>
+        <td th:text="*{id}"></td>
+        <td th:text="*{postTitle}"></td>
+        <td th:text="*{postContent}"></td>
+        <td th:text="*{memberName}"></td>
+        <td th:text="*{postReadCount}"></td>
+        <td id="date-wrap"></td>
+    </tr>
+</table>
+<div id="file-wrap"></div>
+<div>
+    <div>
+        <textarea id="reply-content"></textarea>
+    </div>
+    <button id="write-button">작성 완료</button>
+</div>
+<h2 id="no-reply" style="display: none">댓글이 없습니다.</h2>
+<table id="replies-wrap"></table>
+<div id="page-wrap"></div>
+</body>
+<script src="/js/util.js"></script>
+<script th:inline="javascript">
+    const post = [[${post}]];
+    const member = [[${session.member}]];
+    const createdDate = [[${post.createdDate}]]
+    const dateWrap = document.getElementById("date-wrap");
+    dateWrap.innerText = timeForToday(createdDate);
+</script>
+<script src="/js/file/event.js"></script>
+<script src="/js/reply/service.js"></script>
+<script src="/js/reply/layout.js"></script>
+<script src="/js/reply/event.js"></script>
+</html>

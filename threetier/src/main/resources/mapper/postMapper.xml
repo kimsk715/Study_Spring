@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.threetier.mapper.PostMapper">
+    <select id="selectAll" resultType="postDTO">
+        SELECT
+        MEMBER_NAME, ID, POST_TITLE, POST_CONTENT,
+        POST_READ_COUNT, MEMBER_ID, CREATED_DATE, UPDATED_DATE
+        FROM
+        (
+        SELECT
+        ROWNUM R, MEMBER_NAME, ID, POST_TITLE, POST_CONTENT,
+        POST_READ_COUNT, MEMBER_ID, CREATED_DATE, UPDATED_DATE
+        FROM
+        (
+        SELECT
+        M.MEMBER_NAME, P.ID, P.POST_TITLE, P.POST_CONTENT,
+        P.POST_READ_COUNT, P.MEMBER_ID, P.CREATED_DATE, P.UPDATED_DATE
+        FROM TBL_MEMBER M JOIN TBL_POST P
+        ON M.ID = P.MEMBER_ID
+        <if test="keyword != null">
+            AND POST_TITLE LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test="categories != null">
+            AND MEMBER_NAME IN (
+            <trim suffixOverrides=",">
+                <foreach item="category" collection="categories">
+                    #{category},
+                </foreach>
+            </trim>
+            )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="order == 'recent'.toString()">
+                ID
+            </when>
+            <otherwise>
+                POST_READ_COUNT
+            </otherwise>
+        </choose>
+        DESC
+        )
+        <![CDATA[
+        WHERE ROWNUM <= 10
+        ]]>
+        )
+        <![CDATA[
+        WHERE R >= 1
+        ]]>
+    </select>
+
+    <select id="selectTotal" resultType="_int">
+        SELECT COUNT(*)
+        FROM TBL_MEMBER M JOIN TBL_POST P
+        ON M.ID = P.MEMBER_ID
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="keyword != null">
+                    POST_TITLE LIKE '%' || #{keyword} || '%'
+                </if>
+                <if test="categories != null">
+                    AND MEMBER_NAME IN (
+                    <trim suffixOverrides=",">
+                        <foreach item="category" collection="categories">
+                            #{category},
+                        </foreach>
+                    </trim>
+                    )
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="postDTO">
+        SELECT
+            M.MEMBER_NAME, P.ID, P.POST_TITLE, P.POST_CONTENT, P.POST_READ_COUNT, P.MEMBER_ID,
+            P.CREATED_DATE, P.UPDATED_DATE
+        FROM TBL_MEMBER M JOIN TBL_POST P
+        ON M.ID = P.MEMBER_ID AND P.ID = #{id}
+    </select>
+
+    <update id="updateReadCount">
+        UPDATE TBL_POST
+        SET POST_READ_COUNT = POST_READ_COUNT + 1
+        WHERE ID = #{id}
+    </update>
+    <insert id="insert">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT SEQ_POST.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TBL_POST (ID, POST_TITLE, POST_CONTENT, MEMBER_ID)
+        VALUES(#{id}, #{postTitle}, #{postContent}, #{memberId})
+    </insert>
+    <update id="update">
+        UPDATE TBL_POST
+        SET POST_TITLE = #{postTitle}, POST_CONTENT = #{postContent}, UPDATED_DATE = SYSDATE
+        WHERE ID = #{id}
+    </update>
+    <delete id="delete">
+        DELETE FROM TBL_POST
+        WHERE ID = #{id}
+    </delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

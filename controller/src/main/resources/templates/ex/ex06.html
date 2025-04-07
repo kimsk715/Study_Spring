@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EX06</title>
+    <link rel="stylesheet" href="/css/ex/ex06.css">
+</head>
+<body>
+<!--
+    전달받은 Student 정보 중, 이름, 국어점수, 영어점수, 수학점수, 평균점수를 출력한다.
+-->
+<div></div>
+<table th:object="${studentVO}">
+    <tr>
+        <th>이름</th>
+        <th>국어</th>
+        <th>영어</th>
+        <th>수학</th>
+        <th>평균</th>
+    </tr>
+    <tr>
+        <td th:text="*{name} + '님'"></td>
+        <td th:text="|*{kor}점|"></td>
+        <td th:text="|*{eng}점|"></td>
+        <td th:text="|*{math}점|"></td>
+        <td th:text="|${average}점|"></td>
+    </tr>
+</table>
+</body>
+</html>
+
+
+
+
+
+
+
